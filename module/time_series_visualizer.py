@@ -29,13 +29,30 @@ def draw_bar_plot():
                       y='Average Page Views', hue='Months', legend_out=False)
 
     legend = fig.axes.flat[0].get_legend()
-    month_labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August',
-                    'September', 'October', 'November', 'December']
-    for t, l in zip(legend.texts, month_labels):
+    month_legends = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August',
+                     'September', 'October', 'November', 'December']
+    for t, l in zip(legend.texts, month_legends):
         t.set_text(l)
 
     fig.savefig('./img/bar_plot.png')
 
 
 def draw_box_plot():
-    pass
+    df_box = df.copy()
+    df_box['Year'] = df_box.index.year
+    df_box['Month'] = df_box.index.month
+    df_box = df_box.rename(columns={
+        'value': 'Page Views'
+    })
+
+    plt.subplot(1, 2, 1)
+    sns.boxplot(data=df_box, x='Year', y='Page Views')
+    plt.title('Year-wise Box Plot (Trend)')
+
+    plt.subplot(1, 2, 2)
+    sns.boxplot(data=df_box, x='Month', y='Page Views',)
+    plt.title('Month-wise Box Plot (Seasonality)')
+    plt.xticks([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], ['Jan', 'Feb', 'Mar',
+                                                         'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'])
+
+    plt.savefig('./img/box_plot.png')
