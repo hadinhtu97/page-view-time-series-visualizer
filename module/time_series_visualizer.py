@@ -16,17 +16,14 @@ def draw_line_plot():
 
 
 def draw_bar_plot():
-    df_bar = df
-    df_bar.insert(0, 'day', df_bar.index.day)
-    df_bar.insert(0, 'month', df_bar.index.month)
-    df_bar.insert(0, 'year', df_bar.index.year)
-    df_bar = df_bar.groupby(['year', 'month']).mean()
-    df_bar = df_bar.reset_index()
+    df_bar = df.copy()
+    df_bar['Years'] = df_bar.index.year
+    df_bar['Months'] = df_bar.index.month
     df_bar = df_bar.rename(columns={
-        'year': 'Years',
-        'month': 'Months',
         'value': 'Average Page Views'
     })
+    df_bar = df_bar.groupby(['Years', 'Months']).mean()
+    df_bar = df_bar.reset_index()
 
     fig = sns.catplot(kind='bar', data=df_bar, x='Years',
                       y='Average Page Views', hue='Months', legend_out=False)
